@@ -76,7 +76,7 @@ MIDTRANS_CLIENT_KEY=*YOUR MIDTRANS CLIENT KEY*
 4. This app using cloudinary as a file storage
 
 ```sh
-CLOUDINARY_URL=cloudinary://187782799782147:AdcT_-lSFutl1EkolC_Oir2LVhc@dvaqmqyrl
+CLOUDINARY_URL=*YOUR CLOUDINARY URL*
 ```
 
 5. Starting application
@@ -85,7 +85,7 @@ CLOUDINARY_URL=cloudinary://187782799782147:AdcT_-lSFutl1EkolC_Oir2LVhc@dvaqmqyr
 $ npm run startDev
 ```
 
-6. ZILGYA Server App is Running
+6. Lucky Movie Server App is Running
 
 ### Related Project
 

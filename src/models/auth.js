@@ -25,7 +25,7 @@ const registerNewUSer = (email, password) => {
 
 const getEmail = (email) => {
     return new Promise((resolve, reject) => {
-        const sqlQuery = "SELECT email from public.users where email = $1";
+        const sqlQuery = "SELECT email, id from public.users where email = $1";
         db.query(sqlQuery, [email])
         .then((result) => {
             resolve(result);
@@ -53,8 +53,30 @@ const getPassword = (email) => {
     });
 };
 
+const updatePassword = (id, password) => {
+    return new Promise ((resolve, reject) => {
+        const updated_at = new Date();
+        const sqlQuery = "UPDATE public.users SET password=$1, updated_at=$2 WHERE id=$3"
+        const values = [ password, updated_at, id];
+        db.query(sqlQuery, values)
+        .then(() => {
+            const response ={
+                message: "Password has been reset"
+            };
+            resolve(response);
+        })
+        .catch((error) => {
+            reject({
+                status: 500,
+                error
+            });
+        });
+    });
+}
+
 module.exports = {
     registerNewUSer,
     getEmail,
-    getPassword
+    getPassword,
+    updatePassword
 };
