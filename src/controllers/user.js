@@ -21,7 +21,7 @@ const updateMyProfile = (req, res) => {
     const {file = null} = req;
     let picture;
     if(file){
-        picture = req.file.path;
+        picture = req.file;
     }
     updateUser(req.body, req.userPayload, picture)
     .then(({data, message}) => {

@@ -4,12 +4,12 @@ const registerNewUSer = (email, password) => {
     return new Promise ((resolve, reject) => {
         const created_at = new Date();
         const updated_at = new Date();
-        const sqlQuery = "INSERT INTO public.users (email, password, created_at, updated_at) VALUES($1, $2, $3, $4);";
+        const sqlQuery = "INSERT INTO public.users (email, password, created_at, updated_at) VALUES($1, $2, $3, $4) returning id;";
         const values = [email, password, created_at, updated_at];
         db.query(sqlQuery, values)
         .then(({rows}) => {
             const response ={
-                data: rows[0],
+                id: rows[0].id,
                 message: "Account Created"
             };
             resolve(response);
@@ -20,6 +20,34 @@ const registerNewUSer = (email, password) => {
                 error
             });
         });
+    });
+};
+
+const activateAccount = (id) => {
+    return new Promise((resolve, reject) => {
+        const activated_at = new Date();
+        let sqlQuery = "UPDATE public.users set activated_at = $1 WHERE id = $2 returning id, email, created_at, updated_at, activated_at";
+        db.query(sqlQuery, [activated_at, id])
+        .then(({rows}) => {
+            if(rows.length === 0){
+                return reject({
+                    error: "Id Not Found!",
+                    status: 400
+                });
+            }
+            const response = {
+                message: "Account activated",
+                data: rows
+            };
+            resolve(response);
+        })
+        .catch((error) => {
+            reject({
+                error,
+                status: 500
+            });
+        });
+        
     });
 };
 
@@ -39,7 +67,7 @@ const getEmail = (email) => {
 
 const getPassword = (email) => {
     return new Promise ((resolve, reject) => {
-        const sqlQuery = "select password, id, role_id from public.users where email = $1";
+        const sqlQuery = "select password, id, role_id, activated_at from public.users where email = $1";
         db.query(sqlQuery, [email])
         .then((result) => {
             if(result.rowCount === 0){
@@ -78,5 +106,6 @@ module.exports = {
     registerNewUSer,
     getEmail,
     getPassword,
-    updatePassword
+    updatePassword,
+    activateAccount
 };

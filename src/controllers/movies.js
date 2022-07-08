@@ -61,18 +61,5 @@ const showMovieDetail = async (req, res) => {
     });
   }
 };
-const showMovieCinema = async (req, res) => {
-  try {
-    const { data } = await getMovieCinema(req.query);
-    res.status(200).json({
-      data,
-    });
-  } catch (error) {
-    const status = error.status || 500;
-    res.status(status).json({
-      error: error.message,
-    });
-  }
-};
 
-module.exports = { createMovie, showMovieNow, showMovieUpcoming, showMovieDetail, showMovieCinema };
+module.exports = { createMovie, showMovieNow, showMovieUpcoming, showMovieDetail };

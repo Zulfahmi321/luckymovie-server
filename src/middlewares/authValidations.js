@@ -113,6 +113,23 @@ const checkResetForm = [
     },
 ];
  
+const resend = [
+    body("email")
+        .isEmail()
+        .withMessage("Please enter a valid email address")
+        .normalizeEmail()
+];
+
+const checkResendForm = [
+    resend,
+    (req, res, next) => {
+      const error = validationResult(req);
+      if (!error.isEmpty()) {
+        return errorResponse(res, 400, {msg: error.array()})
+      }
+      next();
+    },
+];
 module.exports = {
-    checkRegistedEmail, checkRegisterForm, checkSigInForm, checkForgotForm, checkEmail, checkResetForm
+    checkRegistedEmail, checkRegisterForm, checkSigInForm, checkForgotForm, checkEmail, checkResetForm, checkResendForm
 };
