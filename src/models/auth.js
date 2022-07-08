@@ -61,7 +61,7 @@ const updatePassword = (id, password) => {
         db.query(sqlQuery, values)
         .then(() => {
             const response ={
-                message: "Password has been reset"
+                message: "Password has been updated"
             };
             resolve(response);
         })

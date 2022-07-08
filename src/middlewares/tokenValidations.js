@@ -3,10 +3,10 @@ const jwt = require("jsonwebtoken");
 const { client } = require("../config/redis");
 
 const checkResetToken = (req, res, next) => {
-    const bearerToken = req.header("x-access-token");
-    const token = bearerToken.split(" ")[1];
+    const token = req.header("x-access-token");
+ 
     
-    if(!bearerToken){
+    if(!token){
         return errorResponse(res, 401, {msg: "Sign in needed"});
     }
     //Token Verification
@@ -24,10 +24,9 @@ const checkResetToken = (req, res, next) => {
 }; 
 
 const checkToken = (req, res, next) => {
-    const bearerToken = req.header("x-access-token");
-    const token = bearerToken.split(" ")[1];
-    
-    if(!bearerToken){
+    const token = req.header("x-access-token");
+   
+    if(!token){
         return errorResponse(res, 401, {msg: "Sign in needed"});
     }
     //Token Verification
