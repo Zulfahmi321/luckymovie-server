@@ -92,15 +92,20 @@ const confirmPayment = async (response) => {
       if (fraudStatus == "challenge") {
         // DO set transaction status on your databaase to 'challenge'
       } else if (fraudStatus == "accept") {
-        const result = await db.query("UPDATE transactions set payment_status = 'PAID' WHERE id = $1 RETURNING *", [orderId]);
+        const result = await db.query("UPDATE transactions set payment_status = 'PAID',ticket_status='active' WHERE id = $1 RETURNING *", [orderId]);
+        console.log(result);
+        const userId = result.rows[0].user_id;
+        const update = await db.query("UPDATE users set loyalty_points = loyalty_points +10 where id = $1", [userId]);
         return {
-          data: result.rows[0],
+          data: update.rows[0],
         };
       }
     } else if (transactionStatus == "settlement") {
-      const result = await db.query("UPDATE transactions set status = 'PAID' WHERE id = $1 RETURNING *", [orderId]);
+      const result = await db.query("UPDATE transactions set payment_status = 'PAID',ticket_status='active' WHERE id = $1 RETURNING *", [orderId]);
+      const userId = result.rows[0].user_id;
+      const update = await db.query("UPDATE users set loyalty_points = loyalty_points +10 where id = $1", [userId]);
       return {
-        data: result.rows[0],
+        data: update.rows[0],
       };
     } else if (transactionStatus == "deny") {
       // DO you can ignore 'deny', because most of the time it allows payment retries

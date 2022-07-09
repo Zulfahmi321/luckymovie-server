@@ -14,7 +14,7 @@ redisConn();
 const app = express();
 const PORT = process.env.PORT;
 
-const originList = ["http://localhost:3000", "::1"];
+const originList = ["http://localhost:3000", "::1","https://luckymovie-client.vercel.app"];
 
 const corsOption = {
   origin: (origin, callback) => {

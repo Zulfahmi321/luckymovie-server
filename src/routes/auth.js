@@ -11,7 +11,7 @@ Router.post("/new", authValidation.checkRegisterForm, authValidation.checkRegist
 Router.post("/activate/:token", tokenValidation.checkActivationToken, authController.activation);
 
 //Resend activation email
-Router.post("/resend", authValidation.checkResendForm, authValidation.checkEmail, authController.resend);
+Router.post("/resend", authValidation.checkResendForm, authValidation.checkActiveEmail, authController.resend);
 
 // //Sign In
 Router.post("/", authValidation.checkSigInForm, authController.signIn);

@@ -8,7 +8,7 @@ const getMovieCinema = async (query) => {
     const queryProperty = Object.keys(query);
     let filterQuery = [];
     let params = [movie_id];
-    let sqlQuery = "select c.id,c.price as price,name,city,address,time,date from cinemas c join cinema_locations cl on cl.cinema_id =c.id join cinema_times ct on ct.cinema_id = c.id where c.movies_id = $1 ";
+    let sqlQuery = "select c.id,c.price as price,name,city,address,time,date from cinemas c join times t on t.id = c.times_id join location l on l.id = c.location_id  where c.movies_id = $1 ";
 
     const queryList = ["location", "cinema_date"];
     const queryFilter = queryProperty.filter((val) => queryList.includes(val));
@@ -22,7 +22,7 @@ const getMovieCinema = async (query) => {
             params.push(location);
             break;
           case "cinema_date":
-            filterQuery.push(" date = $" + (params.length + 1), " AND");
+            filterQuery.push(" date = TO_DATE($" + (params.length + 1) + ",'DD/MM/YYYY')", " AND");
             params.push(cinema_date);
             break;
           default:
@@ -50,7 +50,8 @@ const getMovieCinema = async (query) => {
 const getCinemaSeat = async (query) => {
   const { movie_id, cinema_id } = query;
   try {
-    const sqlQuery = "select transaction_id,seat from (select id from screening where cinema_id = $1 and movie_id = $2) as s join transactions t on t.screening_id = s.id join tickets ti on t.id=ti.transaction_id where t.status='PAID'";
+    const sqlQuery =
+      "select transaction_id,seat from (select id from screening where cinema_id = $1 and movie_id = $2) as s join transactions t on t.screening_id = s.id join tickets ti on t.id=ti.transaction_id where t.payment_status='PAID'";
     const result = await db.query(sqlQuery, [cinema_id, movie_id]);
     return {
       data: result.rows,

@@ -53,7 +53,7 @@ const activateAccount = (id) => {
 
 const getEmail = (email) => {
     return new Promise((resolve, reject) => {
-        const sqlQuery = "SELECT email, id from public.users where email = $1";
+        const sqlQuery = "SELECT email, id, activated_at from public.users where email = $1";
         db.query(sqlQuery, [email])
         .then((result) => {
             resolve(result);
